@@ -9,6 +9,7 @@ An AI agent is an autonomous system that perceives its environment, makes decisi
 
 ### The Perceive–Decide–Act Loop
 _Sketch and annotate where tools are called:_
+sss
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                                                             │
