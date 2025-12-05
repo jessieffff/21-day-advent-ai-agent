@@ -10,7 +10,7 @@ _Timebox: ~1 hour_
 
 ## Learning materials (pick ~20–25 minutes)
 
-- Read: LangChain docs – [“What is an agent?”](https://python.langchain.com/docs/concepts/agents) and [“How agents use tools.”](https://python.langchain.com/docs/concepts/tools)
+- Read: LangChain docs – ["What is an agent?"](https://python.langchain.com/docs/concepts/agents) and ["How agents use tools."](https://python.langchain.com/docs/concepts/tools)
 - Skim: OpenAI “Building agents” intro for the perceive–decide–act loop.
 - Optional: A short blog post on agent vs. chain vs. RAG to see positioning.
 
