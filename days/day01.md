@@ -8,12 +8,12 @@ _Timebox: ~1 hour_
 - Learn the core perceive–decide–act loop and how tools fit into it.
 - Get a light taxonomy of agent patterns (reactive, plan-and-execute, multi-agent handoff).
 
-## Learning materials (pick ~20–25 minutes)
+## Learning materials (≈ 20–25 minutes)
 
-- Read: LangChain docs – ["What is an agent?"](https://python.langchain.com/docs/concepts/agents) and ["How agents use tools."](https://python.langchain.com/docs/concepts/tools)
-- Skim: OpenAI “Building agents” intro for the perceive–decide–act loop.
-- Optional: A short blog post on agent vs. chain vs. RAG to see positioning.
-
+- Read: [**LangChain — Agents documentation**](https://docs.langchain.com/oss/python/langchain/agents) (core reference on how agents and tools work) 
+- Read: [**LangChain Overview / LangGraph introduction**](https://docs.langchain.com/oss/python/langchain/overview )(when to use LangChain vs LangGraph; architecture & workflow explanation)
+- Read: [**OpenAI — “A Practical Guide to Building Agents”**](https://cdn.openai.com/business-guides-and-resources/a-practical-guide-to-building-agents.pdf)(framework-agnostic guide covering the perceive → decide → act loop; tool use; safety & design patterns) — h
+- Optional (tutorial-style): [**LangGraph + agent/workflow patterns guide**](https://docs.langchain.com/oss/python/langgraph/workflows-agents)(for multi-step agents & orchestration patterns)
 ## Activities (about 30 minutes)
 
 - Draft your own one-paragraph definition of an AI agent vs. chatbot vs. chain.
