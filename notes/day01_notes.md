@@ -8,7 +8,7 @@ _Your one-paragraph definition:_
 An AI agent is an autonomous system that perceives its environment, makes decisions based on observations, and takes actions (including tool calls) to achieve goals—iterating until completion. A chatbot is a reactive conversational interface that responds to user input without persistent goals or tool use. A chain is a deterministic sequence of predefined steps that executes a fixed workflow. Agents differ because they possess agency: they can reason about multiple solution paths, call tools dynamically based on task requirements, adapt to intermediate results, and iterate toward objectives without human intervention at each step.
 
 ### The Perceive–Decide–Act Loop
-_Sketch and annotate where tools are called:_
+_Sketch and annotate where tools are called:_ß
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                                                             │
