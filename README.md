@@ -29,7 +29,7 @@ The table below gives a high-level overview of the 21-day curriculum (about one 
 | Day  | Topic                              | Key goals |
 |---|------------------------------------|---|
 | **1**  | AI foundations & agent basics   | Understand agent vs. chatbot, the perceive–decide–act loop, and common patterns. |
-| **2**  | LangChain primer                 | Learn LangChain core concepts (models, prompts, chains) and run your first LLM call. |
+| **2**  | LangChain primer                 | Learn LangChain core componeents (agent, models, prompts, chains)  |
 | **3**  | Tool calling                     | Add simple tools (math, search) and handle structured outputs. |
 | **4**  | Memory basics                    | Use LangChain memory primitives for short-term context. |
 | **5**  | Retrieval setup                  | Build a basic RAG chain with a local vector store. |
