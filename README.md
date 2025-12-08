@@ -30,25 +30,10 @@ The table below gives a high-level overview of the 21-day curriculum (about one 
 |---|------------------------------------|---|
 | **1**  | AI foundations & agent basics   | Understand agent vs. chatbot, the perceive–decide–act loop, and common patterns. |
 | **2**  | LangChain primer                 | Learn LangChain core componeents (agent, models, prompts, chains)  |
-| **3**  | Tool calling                     | Add simple tools (math, search) and handle structured outputs. |
-| **4**  | Memory basics                    | Use LangChain memory primitives for short-term context. |
-| **5**  | Retrieval setup                  | Build a basic RAG chain with a local vector store. |
-| **6**  | Agent design patterns            | Compare reactive vs. plan-and-execute agents; scope tasks with SOPs. |
-| **7**  | LangGraph intro                  | Model a small graph for multi-step tasks; run locally. |
-| **8**  | Observability quickstart         | Add LangSmith or simple logging; capture traces for a run. |
-| **9**  | Guardrails & prompt hygiene      | Add instructions, output schemas, and safety checks. |
-| **10** | Tooling expansion                | Integrate a web search or file tool; handle tool errors. |
-| **11** | Multi-agent patterns             | Coordinate two agents with a shared memory/toolbox. |
-| **12** | Planner/worker graph             | Build a planner + executor flow in LangGraph. |
-| **13** | Mid-journey reflection           | Review learnings, adjust goals, and backlog. |
-| **14** | Retrieval improvements           | Add sources, citations, and rerankers; evaluate RAG quality. |
-| **15** | Evaluation                       | Create eval prompts and simple quality metrics; run batch tests. |
-| **16** | State & persistence              | Persist graph state to disk/DB; resume runs. |
-| **17** | Async & streaming                | Add streaming outputs and concurrent tool calls. |
-| **18** | External APIs                    | Wire a custom API client as a tool; handle auth securely. |
-| **19** | Deployment options               | Compare FastAPI, serverless, and background workers; ship a minimal API. |
-| **20** | Final project design             | Choose a multi-agent goal, sketch architecture, and define tasks. |
-| **21** | Final project build & test       | Implement, evaluate, and document the project with LangChain/LangGraph. |
+| **3**  | Project Planning                | Translate the product idea into execution-ready artifacts (PRD, plan, repo scaffold) |
+
+## Product I made during this learning 
+Industry Newletter AI agent: https://github.com/jessieffff/newsletter-agent
 
 ## Contributing and license
 
