@@ -19,7 +19,7 @@
 - Wrote supporting docs:
   - `docs/data-model.md`
   - `docs/launch-checklist.md`
-
+![Product Architecture](images\productArchitecture.png)
 ---
 
 ## 2) What I learned (key takeaways)
@@ -75,3 +75,4 @@ Ask for feedback explicitly from different viewpoints:
 - What’s the **ranking policy**: freshness-first vs source-trust-first vs balanced?
 
 ---
+
