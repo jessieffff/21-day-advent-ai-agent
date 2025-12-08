@@ -39,28 +39,15 @@
 
 ## 3) Practical notes: how to write a stronger PRD (what I’ve applied)
 
-### A. Start with “just enough” structure and context
-A solid PRD typically includes: project specifics, goals, background/strategy, assumptions, user stories, and success metrics. 
+### A. Start with a “context packet,” not a blank prompt
+- Give the AI the essentials upfront: target users, the problem, why now, business goal, constraints (time/tech/legal), and what “success” means.
+- Ask it to restate the problem and assumptions first, so you can correct misalignment early.
 
-### B. Write user stories in a consistent format
-User stories are commonly expressed as **persona + need + purpose** (“As a…, I want…, so that…”). 
+### B. Use the AI to force clarity on scope (and kill scope creep)
+Have it draft: In-scope / Out-of-scope / Non-goals and a short MVP definition. 
 
-### C. Make acceptance criteria testable
-Acceptance criteria should be **clear, concise, and testable** (describe outcomes, not implementation).  
-**Example (for this product):**
-- Given a saved subscription, when I click “Send test,” then I receive an email that contains *N* items and each item includes a valid source URL.
-
-### D. Iterate the PRD like code
-Instead of trying to get it perfect in one pass:
-- Start with a skeleton (sections + placeholders),
-- Fill sections one by one (stories, flows, edge cases),
-- Tighten ambiguity (metrics, constraints, non-goals).
-
-### E. Use “review lenses”
-Ask for feedback explicitly from different viewpoints:
-- Engineering: unclear requirements, missing edge cases, feasibility
-- Design: what UI states are implied (loading, errors, empty history)
-- QA: what should be tested and what “done” means
+### C. Turn fuzzy requirements into testable acceptance criteria
+Ask for requirements in the format: User story → acceptance criteria → edge cases.
 
 ---
 
