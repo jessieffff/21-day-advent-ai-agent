@@ -31,6 +31,7 @@ The table below gives a high-level overview of the 21-day curriculum (about one 
 | **1**  | AI foundations & agent basics   | Understand agent vs. chatbot, the perceive–decide–act loop, and common patterns. |
 | **2**  | LangChain primer                 | Learn LangChain core componeents (agent, models, prompts, chains)  |
 | **3**  | Project Planning                | Translate the product idea into execution-ready artifacts (PRD, plan, repo scaffold) |
+| **4**  | AI Agent Orchestration Patterns  | Learn 5 core patterns (Sequential, Concurrent, Group Chat, Handoff, Magentic) and when to use each. |
 
 ## Product I made during this learning 
 Industry Newletter AI agent: https://github.com/jessieffff/newsletter-agent
