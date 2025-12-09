@@ -26,12 +26,12 @@ The journey centers on LangChain and LangGraph for building capable, reliable ag
 
 The table below gives a high-level overview of the 21-day curriculum (about one hour per day). See the individual day files in the `days/` folder for details.
 
-| Day  | Topic                              | Key goals |
-|---|------------------------------------|---|
-| **1**  | AI foundations & agent basics   | Understand agent vs. chatbot, the perceive–decide–act loop, and common patterns. |
-| **2**  | LangChain primer                 | Learn LangChain core componeents (agent, models, prompts, chains)  |
-| **3**  | Project Planning                | Translate the product idea into execution-ready artifacts (PRD, plan, repo scaffold) |
-| **4**  | AI Agent Orchestration Patterns  | Learn 5 core patterns (Sequential, Concurrent, Group Chat, Handoff, Magentic) and when to use each. |
+| Day  | Topic                              | Key goals | Materials |
+|---|------------------------------------|----|---|
+| **1**  | AI foundations & agent basics   | Understand agent vs. chatbot, the perceive–decide–act loop, and common patterns. | [Guidance](days/day01.md) \| [Notes](notes/day01_notes.md) |
+| **2**  | LangChain primer                 | Learn LangChain core componeents (agent, models, prompts, chains)  | [Guidance](days/day02.md) \| [Notes](notes/day02_notes.md) |
+| **3**  | Project Planning                | Translate the product idea into execution-ready artifacts (PRD, plan, repo scaffold) | [Guidance](days/day03.md) \| [Notes](notes/day03_notes.md) |
+| **4**  | AI Agent Orchestration Patterns  | Learn 5 core patterns (Sequential, Concurrent, Group Chat, Handoff, Magentic) and when to use each. | [Guidance](days/day04.md) \| [Notes](notes/day04_notes.md) |
 
 ## Product I made during this learning 
 Industry Newletter AI agent: https://github.com/jessieffff/newsletter-agent
