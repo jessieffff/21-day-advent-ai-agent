@@ -16,11 +16,21 @@
 	- Simple, single-pass app → LangChain alone is sufficient.
 	- Multi-step, stateful, auditable workflow → LangGraph orchestrating LangChain components.
 
-## Essential Augmentations
+## Key Components and Concepts in LangGraph Workflows
 
-- **Tool calling:** Invoke APIs/functions when needed; ground answers with real data.
-- **Structured outputs:** Enforce schemas (JSON/Pydantic) to reduce hallucinations and enable validation.
-- **Short-term memory:** Scratchpads/buffers to capture intermediate reasoning within a run; checkpoint selectively.
+- **Graph (nodes & edges):** A directed workflow where nodes perform steps and edges define control flow. Supports sequential paths, branches, loops, and parallel fan-out/fan-in.
+- **Nodes:** Stateless functions or composites that consume typed state and emit partial updates. Use **subgraphs** to encapsulate reusable planners, evaluators, or tool chains.
+- **Typed state (schema):** A shared, well-defined state object (e.g., `AgentState`) with optional fields. Each node adds or updates fields; merges are deterministic to enable reproducibility and safe retries.
+- **Reducers & deterministic merges:** Per-key merge strategies (replace, append, set/union, numeric ops, or custom reducers) resolve updates from parallel branches in a confluent, audit-friendly way.
+- **Control flow primitives:** Conditional routing, map/fan-out across items, join/fan-in, bounded loops with explicit termination criteria (time/budget caps, convergence tests).
+- **Tool calling & structured outputs:** Nodes may call external APIs/functions; enforce JSON/Pydantic schemas to validate outputs and reduce hallucinations.
+- **Short-term memory:** Scratchpads/buffers capture intermediate reasoning within a run; promote only validated artifacts into the typed state.
+- **Checkpointing & persistence:** Automatic per-step snapshots enable resume, targeted retries, and full provenance. Plug persistence stores to retain run history.
+- **Observability:** Run IDs, event logs, decisions, and metrics for auditability and evaluation. Instrument nodes to track latency, cost, and quality signals.
+- **Error handling & guardrails:** Best-effort execution, structured error accumulation, retries/backoff, and cancellation. Guardrails prevent runaway loops and budget overruns.
+- **Concurrency semantics:** Parallel branches via async execution (e.g., `asyncio.gather()`), bounded by resource limits; results merged deterministically.
+- **Execution API:** Build/compile a graph, then `invoke` for single-pass runs or `stream` for stepwise outputs. Provide thin entry functions (e.g., `run_once(subscription)`) to initialize state and kick off the workflow.
+
 
 ## Design Patterns Comparison to Day 04 (Pattern Catalog)
 - **Parallelization ≈ Concurrent:** Both reduce latency via independent runs; require deterministic aggregation and conflict handling.
@@ -36,30 +46,170 @@
 - **Guardrails:** Add time/budget caps and termination criteria to avoid loops.
 - **Observability:** Log decisions, checkpoints, and evaluation outcomes for auditability.
 
-## When to Use What
-
-- **Start simple:** Single-agent + tools; add orchestration only when specialization/parallelism is needed.
-- **Choose by task shape:** Linear → chaining; independent analyses → parallel; dynamic triage → routing; open-ended → orchestrator–worker + evaluator–optimizer.
-
 ## Project Workflow: Newsletter Agent (LangGraph)
 
 This project uses a three-node LangGraph pipeline to generate a personalized newsletter end-to-end. It demonstrates typed state, deterministic control flow, and checkpointing in practice.
 
-- **Graph (sequential):** `START → Fetch Candidates → Grounded Search → Select & Write → END`
+### Workflow Code Snippets (Newsletter Agent)
+
+Quick start — one-shot run:
+
+```python
+from newsletter_agent.workflow import run_once
+from newsletter_agent.types import Subscription
+
+sub = Subscription(
+	id="demo",
+	topics=["AI agents", "LangGraph"],
+	sources=[{"kind": "rss", "value": "https://blog.langchain.dev/feed"}],
+	item_count=5,
+	tone="concise, professional",
+)
+
+newsletter = await run_once(sub)
+print(newsletter.subject)
+print(newsletter.text)
+```
+
+Typed state schema:
+
+```python
+from typing import List, TypedDict
+
+class AgentState(TypedDict, total=False):
+	subscription: Subscription
+	candidates: List[Candidate]
+	selected: List[SelectedItem]
+	newsletter: Newsletter
+	errors: List[str]
+```
+
+Node 1 — Fetch Candidates:
+
+```python
+async def node_fetch_candidates(state: AgentState) -> AgentState:
+	sub = state.get("subscription")
+	errors = state.get("errors", [])
+	candidates: list[Candidate] = []
+
+	# RSS (sequential)
+	for s in sub.sources:
+		if s.get("kind") == "rss":
+			try:
+				candidates += fetch_rss(s["value"], topic_hint=sub.topics[:3])
+			except Exception as e:
+				errors.append(f"rss:{s['value']}:{e}")
+
+	# Optional sources (NYT/X) if configured
+	try:
+		candidates += await fetch_nyt_async(sub.topics)
+	except Exception as e:
+		errors.append(f"nyt:{e}")
+
+	try:
+		candidates += await fetch_x_async(sub.topics)
+	except Exception as e:
+		errors.append(f"x:{e}")
+
+	state["candidates"] = candidates
+	state["errors"] = errors
+	return state
+```
+
+Node 2 — Grounded Search (Azure AI Foundry):
+
+```python
+import os
+
+async def node_grounded_search(state: AgentState) -> AgentState:
+	sub = state.get("subscription")
+	topics = sub.topics or []
+	if not topics:
+		return state
+
+	if not (os.getenv("FOUNDRY_PROJECT_ENDPOINT") and os.getenv("FOUNDRY_BING_CONNECTION_ID")):
+		return state
+
+	try:
+		results = await grounded_search_via_foundry(
+			query=" OR ".join(topics[:3]), freshness="7d", count=10
+		)
+		state["candidates"] = (state.get("candidates") or []) + results
+	except Exception as e:
+		state.setdefault("errors", []).append(f"foundry:{e}")
+	return state
+```
+
+Node 3 — Select & Write (LLM summarization):
+
+```python
+from langchain_openai import AzureChatOpenAI
+
+def build_llm() -> AzureChatOpenAI:
+	return AzureChatOpenAI(
+		azure_endpoint=os.environ["AZURE_OPENAI_ENDPOINT"],
+		api_key=os.environ["AZURE_OPENAI_API_KEY"],
+		api_version=os.getenv("AZURE_OPENAI_API_VERSION", "2024-10-21"),
+		azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT", "gpt-4o-mini"),
+		temperature=0.2,
+		timeout=45,
+	)
+
+async def node_select_and_write(state: AgentState) -> AgentState:
+	sub = state.get("subscription")
+	llm = build_llm()
+
+	candidates = dedupe_candidates(state.get("candidates") or [])
+	ranked = simple_rank(candidates)
+	picked = ranked[: sub.item_count]
+
+	sys = "You are an expert newsletter editor. Do not invent facts."
+	prompt = render_prompt(sub, picked)
+	resp = await llm.ainvoke([sys, prompt])
+
+	selected = parse_llm_items(resp)  # robust parsing + fallbacks
+	subject = f"Your news digest: {', '.join(sub.topics[:2]) or 'Latest'}"
+	state["selected"] = selected
+	state["newsletter"] = render_newsletter(subject, selected)
+	return state
+```
+
+Graph construction and entry:
+
+```python
+from langgraph.graph import StateGraph, START, END
+from langgraph.checkpoint import InMemorySaver
+
+def build_graph():
+	g = StateGraph(AgentState)
+	g.add_node("fetch_candidates", node_fetch_candidates)
+	g.add_node("grounded_search", node_grounded_search)
+	g.add_node("select_and_write", node_select_and_write)
+
+	g.add_edge(START, "fetch_candidates")
+	g.add_edge("fetch_candidates", "grounded_search")
+	g.add_edge("grounded_search", "select_and_write")
+	g.add_edge("select_and_write", END)
+
+	return g.compile(checkpointer=InMemorySaver())
+
+async def run_once(subscription: Subscription) -> Newsletter:
+	graph = build_graph()
+	thread_id = f"sub:{subscription.id}"
+	final_state = await graph.ainvoke({"subscription": subscription}, thread_id=thread_id)
+	return final_state["newsletter"]
+```
+
+Environment configuration (required):
+
+- `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`
+
+Optional:
+- `AZURE_OPENAI_API_VERSION`, `AZURE_OPENAI_DEPLOYMENT`
+- `NYT_API_KEY`, `X_BEARER_TOKEN`
+- `FOUNDRY_PROJECT_ENDPOINT`, `FOUNDRY_BING_CONNECTION_ID`
 - **Typed state (`AgentState`):** `subscription`, `candidates`, `selected`, `newsletter`, `errors` (optional fields; nodes add incrementally).
-- **Node 1 — Fetch Candidates:**
-	- Aggregates content from RSS (sync) and optionally NYT + X/Twitter (async) using topic-based queries.
-	- Best-effort error handling; failures accumulate in `errors[]` without stopping the run.
-- **Node 2 — Grounded Search:**
-	- Augments candidates via Azure AI Foundry grounding (fresh web results, last 7 days).
-	- Merges new items non-destructively; gracefully degrades if Foundry is unconfigured.
-- **Node 3 — Select & Write:**
-	- Deduplicates, ranks heuristically, selects top N, summarizes with Azure OpenAI (`gpt-4o-mini`, temperature 0.2), and renders HTML + text.
-	- Current parsing uses regex; roadmap includes structured outputs to enforce JSON schemas.
-- **Execution entry:** `run_once(subscription)` builds the graph, runs with initial state, and returns the final `Newsletter`.
-- **Performance & future work:**
-	- Parallelize RSS fetches with `asyncio.gather()`; expect 40–60% Node 1 speedup.
-	- Replace regex parsing with structured outputs; improve ranking; persist checkpoints.
+
 
 Refer to `notes/workflow-reference.md` for detailed architecture, configuration, and testing guidance.
 

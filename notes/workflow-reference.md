@@ -1,18 +1,17 @@
 # Workflow Module Reference
 
 **Module:** `newsletter_agent.workflow`  
+# Workflow Module (Concise Reference)
 **Purpose:** Core LangGraph workflow engine for newsletter generation  
 **Last Updated:** December 9, 2025
 
 ---
 
-## Overview
 
 The workflow module orchestrates the end-to-end newsletter generation process using LangGraph. It defines a three-node sequential pipeline that fetches content, augments it with web search, and generates personalized summaries using Azure OpenAI.
 
 ---
 
-## Architecture
 
 ### Workflow Graph
 
@@ -34,18 +33,11 @@ The workflow maintains state as a `TypedDict` that flows through each node:
 
 ```python
 class AgentState(TypedDict, total=False):
-    subscription: Subscription      # User preferences & configuration
     candidates: List[Candidate]     # Raw content from all sources
     selected: List[SelectedItem]    # Final curated items
     newsletter: Newsletter          # Rendered HTML + text output
     errors: List[str]               # Non-blocking errors encountered
 ```
-
-**Key Properties:**
-- `total=False`: All fields are optional (nodes incrementally populate state)
-- **Immutability:** Each node returns a new state dict (functional paradigm)
-- **Error Accumulation:** Errors don't stop execution; they're logged to `errors[]`
-
 ---
 
 ## Core Components
@@ -55,19 +47,14 @@ class AgentState(TypedDict, total=False):
 #### `build_llm() -> AzureChatOpenAI`
 
 Constructs the Azure OpenAI client used for summarization.
-
 **Environment Variables Required:**
 - `AZURE_OPENAI_ENDPOINT` (required): Azure OpenAI service endpoint
 - `AZURE_OPENAI_API_KEY` (required): API key for authentication
 - `AZURE_OPENAI_API_VERSION` (optional): Defaults to `"2024-10-21"`
 - `AZURE_OPENAI_DEPLOYMENT` (optional): Defaults to `"gpt-4o-mini"`
 
-**Configuration:**
-```python
 {
     "temperature": 0.2,      # Low variance for consistency
-    "timeout": 45,           # 45-second max per LLM call
-}
 ```
 
 **Design Decision:** Temperature of 0.2 balances creativity with determinism. Higher values could produce less consistent summaries; lower values might be too repetitive.
@@ -84,7 +71,6 @@ async def node_*(state: AgentState) -> AgentState:
 ```
 
 ---
-
 #### **Node 1: `node_fetch_candidates`**
 
 **Purpose:** Gather raw content from multiple sources in parallel
@@ -95,8 +81,6 @@ async def node_*(state: AgentState) -> AgentState:
 **Outputs:**
 - `state["candidates"]`: List of `Candidate` objects
 - `state["errors"]`: Any source-specific failures
-
-**Process:**
 
 1. **RSS Feeds** (synchronous)
    - Iterates through `subscription.sources` where `kind == "rss"`
@@ -129,7 +113,6 @@ async def node_*(state: AgentState) -> AgentState:
     "candidates": [
         Candidate(title="...", url="...", source="TechCrunch RSS", ...),
         Candidate(title="...", url="...", source="NYT", ...),
-        # ... 23 total candidates
     ],
     "errors": ["rss:https://broken.feed:ConnectionTimeout"]
 }
@@ -152,7 +135,6 @@ async def node_*(state: AgentState) -> AgentState:
 **Process:**
 
 1. **Early Exit:** If `subscription.topics` is empty, return state unchanged
-
 2. **Check Foundry Configuration:**
    - `FOUNDRY_PROJECT_ENDPOINT`: Azure AI Foundry project URL
    - `FOUNDRY_BING_CONNECTION_ID`: Bing Search connection resource ID
@@ -187,7 +169,6 @@ async def node_*(state: AgentState) -> AgentState:
 }
 ```
 
----
 
 #### **Node 3: `node_select_and_write`**
 
@@ -209,7 +190,6 @@ candidates = dedupe_candidates(state.get("candidates") or [])
 ```
 - Removes duplicate URLs (case-insensitive comparison)
 - Uses SHA-256 hash of normalized URL as deduplication key
-- **Why needed:** RSS, NYT, and web search often return same articles
 
 ##### **Step 2: Ranking**
 ```python
@@ -221,16 +201,10 @@ Heuristic-based scoring (see `ranking.py` for details):
 - **+0.2 points:** Each topic tag matches user's topics
 
 **Example Ranking:**
-```
 Candidate A: snippet ✓, tags=["AI", "LangGraph"] → 1.0 + 0.5 + 0.4 = 1.9
 Candidate B: snippet ✓, tags=[] → 1.0
 Candidate C: snippet ✗, tags=["AI"] → 0.5 + 0.2 = 0.7
-```
-
-##### **Step 3: Selection**
-```python
 picked = ranked[:sub.item_count]
-```
 Takes top N items (e.g., top 8 for `item_count=8`)
 
 ##### **Step 4: LLM Summarization**
@@ -249,7 +223,6 @@ Tone: {subscription.tone}
 
 Create {N} newsletter items. For each, return:
 1) why_it_matters (1 sentence)
-2) summary (2-3 sentences)
 
 Use the snippets; do not add unverified claims.
 
@@ -269,7 +242,6 @@ resp = await llm.ainvoke([sys, prompt])
 - **Model:** Azure OpenAI GPT-4o-mini
 - **Temperature:** 0.2
 - **Timeout:** 45 seconds
-
 ##### **Step 5: Response Parsing**
 
 The LLM response is parsed using regex to extract structured fields:
@@ -280,24 +252,14 @@ def _extract_field(chunk: str, kind: str) -> str | None:
         # Matches: "Why it matters: ..." or "Why: ..."
         pattern = r"why[^:]*:\s*(.+)"
     if kind == "summary":
-        # Matches: "Summary: ..." (multiline)
         pattern = r"summary[^:]*:\s*(.+)"
 ```
 
-**Fallback Behavior:**
-- If regex parsing fails for `why_it_matters`: Uses `"Why it matters: (not provided)"`
-- If regex parsing fails for `summary`: Uses first 400 chars of LLM response chunk
 
-**Future Enhancement:** Replace regex parsing with OpenAI's [Structured Outputs](https://platform.openai.com/docs/guides/structured-outputs) for more reliable field extraction.
 
 ##### **Step 6: Newsletter Rendering**
 
-```python
-subject = f"Your news digest: {', '.join(sub.topics[:2]) or 'Latest'}"
-state["newsletter"] = render_newsletter(subject, selected)
-```
 
-- Calls `render.py` to generate HTML from Jinja2 template
 - Also generates plain text version for email clients without HTML support
 
 **Example Output:**
