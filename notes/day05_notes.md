@@ -200,16 +200,6 @@ async def run_once(subscription: Subscription) -> Newsletter:
 	return final_state["newsletter"]
 ```
 
-Environment configuration (required):
-
-- `AZURE_OPENAI_ENDPOINT`, `AZURE_OPENAI_API_KEY`
-
-Optional:
-- `AZURE_OPENAI_API_VERSION`, `AZURE_OPENAI_DEPLOYMENT`
-- `NYT_API_KEY`, `X_BEARER_TOKEN`
-- `FOUNDRY_PROJECT_ENDPOINT`, `FOUNDRY_BING_CONNECTION_ID`
-- **Typed state (`AgentState`):** `subscription`, `candidates`, `selected`, `newsletter`, `errors` (optional fields; nodes add incrementally).
-
 
 Refer to `notes/workflow-reference.md` for detailed architecture, configuration, and testing guidance.
 
