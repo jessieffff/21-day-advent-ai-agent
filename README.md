@@ -35,6 +35,7 @@ The table below gives a high-level overview of the 21-day curriculum (about one 
 | **5**  | Reliable LLM Workflows with LangGraph | Model multi-step, stateful workflows using typed state, subgraphs, and deterministic control flow; understand how LangChain components plug into LangGraph orchestration. | [Guidance](days/day05.md) \| [Notes](notes/day05_notes.md) |
 | **6**  | Building Trustworthy AI Agents       | Safety guardrails via system messages; threat modeling and mitigations; add human-in-the-loop approvals for sensitive actions. | [Guidance](days/day06.md) \| [Notes](notes/day06_notes.md) |
 | **7**  | Observability & Evaluation in Production | Design trace/span telemetry; track latency, cost, and success; build an offline eval set and design an online feedback loop for continuous improvement. | [Guidance](days/day07.md) \| [Notes](notes/day07_notes.md) |
+| **8**  | Prompt Engineering Fundamentals        | Build robust prompts with components; apply core techniques (clear + recency, priming, syntax, decomposition); use few-shot and non-chat patterns; add grounding with strict schemas; tune `temperature`/`top_p`. | [Guidance](days/day08.md) \| [Notes Template](notes/day08_notes_template.md) |
 
 ## Product I made during this learning 
 Industry Newletter AI agent: https://github.com/jessieffff/newsletter-agent
