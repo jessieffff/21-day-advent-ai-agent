@@ -349,7 +349,3 @@ Return only JSON.
 ```
 
 Suggested defaults: `temperature=0.2`, `top_p=1.0`.
-
----
-
-If you want, I can tailor the schema fields or few-shot exemplars to your real article feed format.
