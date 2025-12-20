@@ -38,6 +38,7 @@ The table below gives a high-level overview of the 21-day curriculum (about one 
 | **8**  | Prompt Engineering Fundamentals        | Build robust prompts with components; apply core techniques (clear + recency, priming, syntax, decomposition); use few-shot and non-chat patterns; add grounding with strict schemas; tune `temperature`/`top_p`. | [Guidance](days/day08.md) \| [Notes Template](notes/day08_notes_template.md) |
 | **9**  | Function Calling & Tools               | Understand tool calling lifecycle; define tools with JSON Schema & LangChain decorators; handle outputs; apply best practices (strict mode, security). | [Guidance](days/day09.md) \| [Notes](notes/day09_notes.md) |
 | **10** | MCP & Function Calling                 | Understand Model Context Protocol (MCP); compare function calling vs. MCP; learn client-server architecture and when to use each approach for scalable AI systems. | [Guidance](days/day10.md) \| [Notes](notes/day10_notes.md) |
+| **11** | Agent Skills: From Tools to Workflows  | Encode repository-scoped workflows; distinguish tools vs. skills; apply the layered stack (Skills → MCP → Function Calls) to build consistent, scalable agents. | [Guidance](days/day11.md) \| [Notes](notes/day11_notes.md) \| [Transcript (XHS)](notes/day11_transcript_xhs.md) |
 
 ## Product I made during this learning 
 Industry Newletter AI agent: https://github.com/jessieffff/newsletter-agent
