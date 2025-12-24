@@ -58,10 +58,10 @@ Agentic RAG Loop (Sense → Plan → Retrieve → Reason → Verify → Answer)
 
 ```mermaid
 flowchart TD
-  A[User Goal] --> B[Sense<br/>(parse goal, context)]
-  B --> C[Plan<br/>(decompose, pick tools)]
-  C --> D[Retrieve (iterative)<br/>(search, re‑rank, expand)]
-  D --> E[Reason<br/>(synthesize evidence)]
+  A[User Goal] --> B[Sense (parse goal, context)]
+  B --> C[Plan (decompose, pick tools)]
+  C --> D[Retrieve (iterative; search, re-rank, expand)]
+  D --> E[Reason (synthesize evidence)]
   E --> F{Verify OK?}
   F -- no --> C
   F -- yes --> G[Answer with Sources]
