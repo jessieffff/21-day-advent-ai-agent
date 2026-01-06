@@ -40,6 +40,7 @@ The table below gives a high-level overview of the 21-day curriculum (about one 
 | **10** | MCP & Function Calling                 | Understand Model Context Protocol (MCP); compare function calling vs. MCP; learn client-server architecture and when to use each approach for scalable AI systems. | [Guidance](days/day10.md) \| [Notes](notes/day10_notes.md) |
 | **11** | Agent Skills: From Tools to Workflows  | Encode repository-scoped workflows; distinguish tools vs. skills; apply the layered stack (Skills → MCP → Function Calls) to build consistent, scalable agents. | [Guidance](days/day11.md) \| [Notes](notes/day11_notes.md)|
 | **12** | Agentic RAG (Retrieval-Augmented Generation) | Understand classic RAG vs. Agentic RAG; add planning, iterative retrieval, tools, and verification; weigh trade-offs and guardrails. | [Guidance](days/day12.md) \| [Notes](notes/day12_notes.md) |
+| **13** | Memory in AI Agents | Understand what memory means for agents; learn the three pillars (state, persistence, selection); distinguish context windows from persistent memory; implement LLM-based memory compression. | [Guidance](days/day13.md) \| [Notes](notes/day13_notes.md) |
 
 ## Product I made during this learning 
 Industry Newletter AI agent: https://github.com/jessieffff/newsletter-agent
