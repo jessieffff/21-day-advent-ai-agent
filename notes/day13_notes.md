@@ -122,6 +122,139 @@ Memory in AI agents is the capability to retain, recall, and use information acr
    - Builds shared understanding with user over time
    - Example: Writing assistant that remembers style guide and past feedback
 
+## Mem0: A Memory Layer for AI Agents
+
+### What is Mem0?
+
+[Mem0](https://mem0.ai/) is a specialized memory layer designed specifically for AI agents. While most developers build custom memory solutions (like my newsletter agent compression), Mem0 provides a production-ready platform that handles the complexity of agent memory at scale.
+
+**Core Value Proposition:**
+- Instant memory for LLMs without building infrastructure from scratch
+- Human-like memory capabilities (learning, forgetting, consolidation)
+- Cross-session continuity across devices and time periods
+
+### How Mem0 Works: Key Features
+
+**1. Intelligent Filtering**
+- Not all information deserves to be remembered
+- Uses priority scoring and contextual tagging to decide what gets stored
+- Avoids memory bloat by filtering noise, similar to human subconscious filtering
+- Example: Remembers "user prefers markdown output" but forgets "user said 'um' three times"
+
+**2. Dynamic Forgetting**
+- Good memory systems need to forget effectively
+- Decays low-relevance entries over time
+- Frees up space and attention for what matters
+- "Forgetting isn't a flaw—it's a feature of intelligent memory"
+
+**3. Memory Consolidation**
+- Moves information between short-term and long-term storage
+- Based on usage patterns, recency, and significance
+- Optimizes both recall speed and storage efficiency
+- Mimics how humans internalize knowledge over time
+
+**4. Cross-Session Continuity**
+- Maintains relevant context across sessions, devices, and time periods
+- Agents don't reset at the end of a session
+- Enables true personalization and learning
+
+### Memory Types in Mem0
+
+| Type | Role | Example |
+|------|------|---------|
+| **Working Memory** (short-term) | Maintains conversational coherence | "What was the last question again?" |
+| **Factual Memory** (long-term) | Retains user preferences, style, domain context | "You prefer markdown output and short-form answers." |
+| **Episodic Memory** (long-term) | Remembers specific past interactions or outcomes | "Last time we deployed this model, the latency increased." |
+| **Semantic Memory** (long-term) | Stores generalized, abstract knowledge | "Tasks involving JSON parsing usually stress you out, want a quick template?" |
+
+### When to Use Mem0 vs. Custom Implementation
+
+**Use Mem0 when:**
+- ✅ Building production applications that need robust memory out-of-the-box
+- ✅ Want managed infrastructure (no database setup, scaling, maintenance)
+- ✅ Need advanced features (forgetting, consolidation, multi-user isolation)
+- ✅ Prefer API-first integration over custom code
+- ✅ Want vector search and semantic retrieval handled automatically
+
+**Build custom (like my implementation) when:**
+- ✅ Learning how memory systems work (educational value)
+- ✅ Have very specific compression/retrieval logic
+- ✅ Want full control over storage backend and costs
+- ✅ Building a proof-of-concept or MVP
+- ✅ Memory requirements are simple (e.g., just topic tracking)
+
+### Mem0 Architecture in Agent Stack
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                       AI AGENT                              │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌──────────────┐      ┌──────────────┐                    │
+│  │     LLM      │◄────►│  Mem0 Layer  │                    │
+│  │  (Reasoning) │      │   (Memory)   │                    │
+│  └──────────────┘      └──────────────┘                    │
+│         ▲                      ▲                            │
+│         │                      │                            │
+│         ▼                      ▼                            │
+│  ┌──────────────┐      ┌──────────────┐                    │
+│  │ Tools/APIs   │      │  Retriever   │                    │
+│  └──────────────┘      └──────────────┘                    │
+│                                                             │
+│  Memory injects context based on:                          │
+│  • User identity and history                               │
+│  • Semantic relevance to current task                      │
+│  • Recency and importance scoring                          │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Key Difference from My Implementation:**
+- Mem0: Managed service with automatic embedding, retrieval, and lifecycle management
+- My implementation: Custom LLM compression + local file storage + manual retrieval (Phase 2 planned)
+
+### Practical Use Cases for Mem0
+
+**Customer Support Agent:**
+```python
+# Mem0 automatically stores and retrieves user context
+mem0.add("User prefers email communication over phone calls")
+mem0.add("User's last issue was resolved by restarting the app")
+
+# Later, when same user returns:
+relevant_memories = mem0.search("user preferences and past issues")
+# Returns: ["prefers email", "restart app worked before"]
+```
+
+**Personal Assistant:**
+```python
+# Learns habits over time
+mem0.add("User schedules important meetings at 10am Tuesdays")
+mem0.add("User dislikes back-to-back meetings")
+
+# When scheduling:
+context = mem0.search("scheduling preferences")
+# Agent knows to suggest Tuesday 10am and leave buffer time
+```
+
+**Coding Copilot:**
+```python
+# Remembers coding style
+mem0.add("User prefers type hints in Python functions")
+mem0.add("User avoids lambda functions, prefers named functions")
+
+# When generating code:
+style_guide = mem0.search("code preferences")
+# Agent generates code matching user's style
+```
+
+### Resources
+
+- **Platform:** [mem0.ai](https://mem0.ai/)
+- **Documentation:** [docs.mem0.ai](https://docs.mem0.ai/)
+- **Open Source:** [github.com/mem0ai/mem0](https://github.com/mem0ai/mem0)
+- **Research:** In-depth articles on memory architectures and evaluation
+
 ## My Implementation: Newsletter Agent Memory Compression
 
 ### Problem Statement
