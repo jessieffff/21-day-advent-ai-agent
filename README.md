@@ -41,6 +41,7 @@ The table below gives a high-level overview of the 21-day curriculum (about one 
 | **11** | Agent Skills: From Tools to Workflows  | Encode repository-scoped workflows; distinguish tools vs. skills; apply the layered stack (Skills → MCP → Function Calls) to build consistent, scalable agents. | [Guidance](days/day11.md) \| [Notes](notes/day11_notes.md)|
 | **12** | Agentic RAG (Retrieval-Augmented Generation) | Understand classic RAG vs. Agentic RAG; add planning, iterative retrieval, tools, and verification; weigh trade-offs and guardrails. | [Guidance](days/day12.md) \| [Notes](notes/day12_notes.md) |
 | **13** | Memory in AI Agents | Understand what memory means for agents; learn the three pillars (state, persistence, selection); distinguish context windows from persistent memory; implement LLM-based memory compression. | [Guidance](days/day13.md) \| [Notes](notes/day13_notes.md) |
+| **14** | Agentic Protocols: MCP, A2A, and NLWeb | Understand why protocols matter for interoperability; distinguish MCP (tools/context), A2A (agent-to-agent collaboration), and NLWeb (natural-language web access); identify where each fits in agentic systems. | [Guidance](days/day14.md) \| [Notes](notes/day14_notes.md) |
 
 ## Product I made during this learning 
 Industry Newletter AI agent: https://github.com/jessieffff/newsletter-agent
